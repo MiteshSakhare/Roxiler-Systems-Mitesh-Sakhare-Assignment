@@ -2,6 +2,15 @@
 
 RateIT is a modern, full-stack web application designed for users to discover stores and submit ratings. Built with a robust **NestJS** backend, **PostgreSQL** database, and a highly responsive, glassmorphism-styled **React** frontend.
 
+<img width="1917" height="865" alt="image" src="https://github.com/user-attachments/assets/edb3467e-c56d-46b7-a4b3-7ebf9b821464" />
+
+<img width="1917" height="865" alt="image" src="https://github.com/user-attachments/assets/89b85bcc-30d0-4b84-b8bf-6618be458326" />
+
+<img width="1917" height="862" alt="image" src="https://github.com/user-attachments/assets/50294459-87cb-450f-aaad-fe3371542f42" />
+
+<img width="1917" height="862" alt="image" src="https://github.com/user-attachments/assets/3fdc5217-7cb9-4387-8100-897197af49de" />
+
+
 ## 🌟 Key Features & User Roles
 
 The platform uses Role-Based Access Control (RBAC) with three primary roles:
