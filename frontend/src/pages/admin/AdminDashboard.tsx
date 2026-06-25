@@ -100,7 +100,7 @@ const AdminDashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         {/* Quick Actions & System Overview */}
-        <motion.div variants={itemVariants} className="col-span-1 flex flex-col gap-8">
+        <motion.div variants={itemVariants} className="col-span-1 flex flex-col gap-6">
           <div className="material-card">
             <div className="material-card-header">
               <h3>Quick Actions</h3>

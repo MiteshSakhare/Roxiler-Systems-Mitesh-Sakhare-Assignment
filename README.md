@@ -42,10 +42,18 @@ The platform uses Role-Based Access Control (RBAC) with three primary roles:
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- PostgreSQL
+- PostgreSQL (or Docker Desktop)
 
-### 1. Backend Setup
-Navigate to the backend directory and install dependencies:
+### 1. Database Setup (Docker)
+The quickest way to start the database is using Docker. Navigate to the backend directory and spin up the PostgreSQL container:
+```bash
+cd backend
+docker-compose up -d
+```
+This automatically sets up a Postgres database on port `5432` matching the default `.env` credentials.
+
+### 2. Backend Setup
+Install dependencies and initialize the database schema:
 ```bash
 cd backend
 npm install
@@ -59,7 +67,7 @@ Start the backend development server:
 npm run start:dev
 ```
 
-### 2. Frontend Setup
+### 3. Frontend Setup
 Navigate to the frontend directory and install dependencies:
 ```bash
 cd frontend
@@ -87,3 +95,13 @@ You can log in with any of the seeded accounts using the universal password: `Pa
 - **Admin**: `admin@storerating.com`
 - **Store Owner (Prada)**: `owner.prada@storerating.com`
 - **Normal User**: `john.doe@storerating.com`
+
+## 🐛 Troubleshooting
+
+### `Error: connect ECONNREFUSED ::1:5432` or `127.0.0.1:5432`
+If you encounter this error while running database migrations, seeds, or starting the backend server, it means your **PostgreSQL service is not running**.
+
+**How to fix:**
+- **Windows**: Press `Win + R`, type `services.msc`, find `postgresql-x64-15` (or similar), right-click, and select **Start**.
+- **Docker**: If you are using a Docker container for your database, ensure the container is running (`docker-compose up -d` or start it via Docker Desktop).
+- **Mac/Linux**: Restart the service using `brew services start postgresql` or `sudo systemctl start postgresql`.
