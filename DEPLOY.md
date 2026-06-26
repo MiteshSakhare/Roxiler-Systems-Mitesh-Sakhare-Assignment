@@ -32,7 +32,20 @@ Render is a great platform for hosting Node.js applications and PostgreSQL datab
 5. Click **Create Web Service**.
 6. Wait for the deployment to finish. Once successful, note down the provided URL (e.g., `https://rateit-backend.onrender.com`).
 
-*Note: After the first deployment, you may want to run your migrations and seeds. You can do this by opening the Render Shell for your Web Service and running `cd backend && npm run migration:run && npm run seed`.*
+*Note: After the first deployment, you must run your migrations and seeds to populate the database. If you cannot access the Render Shell, use one of these alternatives:*
+
+**Alternative A: Update the Start Command (Easiest)**
+1. In your Render Dashboard, go to your Web Service **Settings**.
+2. Temporarily change the **Start Command** to:
+   `cd backend && npm run migration:run && npm run seed && npm run start:prod`
+3. Click **Save Changes** (this will trigger a new deployment).
+4. Once deployed, the database will be seeded. **Important:** Change the Start Command back to `cd backend && npm run start:prod` afterwards so it doesn't try to re-seed every time the server restarts.
+
+**Alternative B: Run Locally against Production DB**
+1. Copy the **External Database URL** from your Render PostgreSQL dashboard.
+2. Open your local `backend/.env` file and replace your local DB credentials with the external Render DB credentials.
+3. Run `npm run migration:run` and `npm run seed` in your local terminal.
+4. Revert your `.env` back to localhost when done.
 
 ---
 
