@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../api/axiosClient';
 import { useAuth } from '../../hooks/useAuth';
 import RatingStars from '../../components/common/RatingStars';
 import { motion } from 'framer-motion';
@@ -14,7 +14,7 @@ export default function AdminStoreDetail() {
 
   useEffect(() => {
     if (id && token) {
-      axios.get(`http://localhost:3000/admin/stores/${id}`, {
+      axios.get(`/admin/stores/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then((res) => setStore(res.data))

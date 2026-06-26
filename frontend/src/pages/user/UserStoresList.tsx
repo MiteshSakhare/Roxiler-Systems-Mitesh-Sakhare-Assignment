@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axiosClient';
 import { useAuth } from '../../hooks/useAuth';
 import RatingStars from '../../components/common/RatingStars';
 import { Search, LocationOn, Storefront, SearchOff } from '@mui/icons-material';
@@ -13,7 +13,7 @@ const UserStoresList: React.FC = () => {
 
   const fetchStoresAndRatings = async () => {
     try {
-      const storesRes = await axios.get('http://localhost:3000/stores', { headers: { Authorization: `Bearer ${token}` } });
+      const storesRes = await axios.get('/stores', { headers: { Authorization: `Bearer ${token}` } });
       setStores(storesRes.data);
     } catch (err) {
       console.error('Failed to fetch data', err);
@@ -26,7 +26,7 @@ const UserStoresList: React.FC = () => {
 
   const handleRatingChange = async (storeId: number, newRating: number) => {
     try {
-      await axios.post(`http://localhost:3000/stores/${storeId}/rating`, {
+      await axios.post(`/stores/${storeId}/rating`, {
         rating: newRating
       }, {
         headers: { Authorization: `Bearer ${token}` }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axiosClient';
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable, { Column } from '../../components/common/DataTable';
 import { FormInput } from '../../components/common/FormInput';
@@ -22,7 +22,7 @@ const AdminUsersList: React.FC = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/admin/users?sortBy=${sortBy}&sortOrder=${sortOrder}`, {
+      const res = await axios.get(`/admin/users?sortBy=${sortBy}&sortOrder=${sortOrder}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setUsers(res.data);

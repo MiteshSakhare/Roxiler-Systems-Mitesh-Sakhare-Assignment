@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axiosClient';
 import { Group, Storefront, Star, TrendingUp, AccessTime } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/admin/dashboard', { 
+        const res = await axios.get('/admin/dashboard', { 
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } 
         });
         setStats(res.data);

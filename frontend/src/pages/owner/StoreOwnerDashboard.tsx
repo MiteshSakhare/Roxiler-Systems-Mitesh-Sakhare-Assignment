@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axiosClient';
 import { useAuth } from '../../hooks/useAuth';
 import DataTable, { Column } from '../../components/common/DataTable';
 import RatingStars from '../../components/common/RatingStars';
@@ -15,7 +15,7 @@ const StoreOwnerDashboard: React.FC = () => {
     const fetchData = async () => {
       try {
         // Fetch unified dashboard data
-        const res = await axios.get(`http://localhost:3000/store-owner/dashboard`, {
+        const res = await axios.get(`/store-owner/dashboard`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         

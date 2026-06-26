@@ -1,99 +1,65 @@
-# Deployment Guide (Free Tier)
+# Deployment Guide
 
-This guide will walk you through deploying the **RateIT** platform entirely for free using **Vercel** (for the Frontend) and **Render** (for the Backend API and PostgreSQL Database).
+This guide will walk you through the process of deploying the frontend to **Vercel** and the backend to **Render**.
 
----
+## 1. Backend Deployment on Render
 
-## Step 1: Set Up the Database (Render)
+Render is a great platform for hosting Node.js applications and PostgreSQL databases.
 
-Render offers a free managed PostgreSQL database.
-
-1. Create a free account on [Render](https://render.com/).
-2. Click **New +** and select **PostgreSQL**.
-3. Fill in a name for your database (e.g., `rateit-db`) and select the **Free** instance type.
+### Step 1: Create a PostgreSQL Database on Render
+1. Go to [Render Dashboard](https://dashboard.render.com/) and click **New > PostgreSQL**.
+2. Fill in a name for your database (e.g., `rateit-db`).
+3. Select your preferred region and choose the **Free** instance type.
 4. Click **Create Database**.
-5. Once created, scroll down to the **Connections** section and copy the **Internal Database URL** (it will look like `postgres://user:password@hostname/dbname`). 
-6. Save this string; you will need it to connect your backend service!
+5. Once created, copy the **Internal Database URL** (for the backend service on Render) and the **External Database URL** (if you need to connect from your local machine).
 
----
-
-## Step 2: Deploy the Backend (Render)
-
-Now we will deploy the Node.js backend on Render and connect it to the database you just created.
-
-1. Click **New +** and select **Web Service**.
-2. Connect your GitHub account and select your repository.
-3. Fill in the following details:
-   - **Name**: `rateit-backend` (or whatever you prefer)
-   - **Root Directory**: `backend`
-   - **Environment**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm run start:prod`
-   - **Instance Type**: `Free`
-4. Click **Advanced** and add your Environment Variables:
+### Step 2: Deploy the NestJS Backend
+1. In the Render Dashboard, click **New > Web Service**.
+2. Connect your GitHub repository and select it.
+3. Configure the web service:
+   - **Name**: `rateit-backend` (or similar)
+   - **Environment**: Node
+   - **Build Command**: `cd backend && npm install && npm run build`
+   - **Start Command**: `cd backend && npm run start:prod`
+4. Expand the **Advanced** section and add the following Environment Variables:
    - `PORT`: `3000`
-   - `JWT_SECRET`: `your_super_secret_jwt_key_here` (make up a strong random string)
-   - `DATABASE_URL`: Paste the **Internal Database URL** you copied from your Render database in Step 1.
-5. Click **Create Web Service**. 
-6. Once deployed, Render will give you a live URL (e.g., `https://rateit-backend.onrender.com`). **Save this URL!**
+   - `DB_HOST`: *(Extract the host from your Internal Database URL)*
+   - `DB_PORT`: `5432`
+   - `DB_USER`: *(Extract the username from the URL)*
+   - `DB_PASSWORD`: *(Extract the password from the URL)*
+   - `DB_NAME`: *(Extract the database name from the URL)*
+   - `JWT_SECRET`: *(Create a strong random string)*
+5. Click **Create Web Service**.
+6. Wait for the deployment to finish. Once successful, note down the provided URL (e.g., `https://rateit-backend.onrender.com`).
 
-> **Note on Migrations & Seeding (Since Render removed Free Shell Access)**: 
-> You cannot run terminal commands on Render directly anymore. Instead, you can seed the remote database from your own computer!
-> 1. Go to your Render Database dashboard.
-> 2. Copy the **External Database URL**.
-> 3. On your local computer, open the `backend/.env` file.
-> 4. Add this line at the very top: `DATABASE_URL=paste_your_external_url_here`
-> 5. Open your local terminal in the `backend` folder and run:
->    ```bash
->    npm run migration:run
->    npm run seed
->    ```
-> 6. Your remote Render database is now fully populated! You can delete the `DATABASE_URL` from your local `.env` file to return to local development.
-
-### Troubleshooting `ECONNREFUSED` on Render
-If your Render Web Service fails to deploy with an `ECONNREFUSED` error, it means the backend cannot find your database and is trying to connect to `localhost`. 
-**Fix:** Go to your Render Web Service -> **Environment**, and double-check that you added the variable exactly named `DATABASE_URL` (all caps, no spaces) and pasted the **Internal Database URL** correctly. Then click **Manual Deploy -> Deploy latest commit**.
+*Note: After the first deployment, you may want to run your migrations and seeds. You can do this by opening the Render Shell for your Web Service and running `cd backend && npm run migration:run && npm run seed`.*
 
 ---
 
-## Step 3: Connect Frontend to the Live Backend
+## 2. Frontend Deployment on Vercel
 
-Before deploying the frontend, you need to tell it to talk to your new Render backend instead of `localhost:3000`.
+Vercel provides seamless deployment for Vite/React applications.
 
-1. In your frontend codebase locally, open `src/api/axiosClient.ts`.
-2. Ensure the `baseURL` uses the environment variable:
-   ```typescript
-   const axiosClient = axios.create({
-     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
-     headers: { 'Content-Type': 'application/json' },
-   });
-   ```
-3. If you haven't already, commit and push this code to GitHub.
+### Step 1: Prepare the Frontend
+Ensure that your frontend is using the environment variable for the backend API URL. We have already updated the codebase to use `import.meta.env.VITE_API_URL` instead of hardcoded `localhost:3000`.
 
----
-
-## Step 4: Deploy the Frontend (Vercel)
-
-Vercel is the best platform for deploying React/Vite applications.
-
-1. Create a free account on [Vercel](https://vercel.com/).
-2. Click **Add New...** -> **Project**.
-3. Import your GitHub repository.
-4. Configure the project:
-   - **Framework Preset**: `Vite`
-   - **Root Directory**: `frontend`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-5. Open the **Environment Variables** section and add:
-   - **Key**: `VITE_API_URL`
-   - **Value**: Your Render Backend URL from Step 2 (e.g., `https://rateit-backend.onrender.com`)
-6. Click **Deploy**.
-7. Vercel will build your app and give you a live frontend URL!
+### Step 2: Deploy on Vercel
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard) and click **Add New > Project**.
+2. Import your GitHub repository.
+3. In the project configuration:
+   - **Framework Preset**: Vercel should auto-detect **Vite**.
+   - **Root Directory**: Click `Edit` and select `frontend`.
+4. Expand the **Environment Variables** section and add:
+   - **Name**: `VITE_API_URL`
+   - **Value**: The URL of your deployed Render backend (e.g., `https://rateit-backend.onrender.com`).
+5. Click **Deploy**.
+6. Wait for the build to complete. Vercel will provide you with a live domain (e.g., `https://rateit-frontend.vercel.app`).
 
 ---
 
-## 🎉 You're Done!
-Your application is now live on the internet completely for free. 
-- Your users can access the platform via the **Vercel** URL.
-- The frontend will securely talk to your **Render** API.
-- The data is safely stored in your **Render** database.
+## Final Checks
+- Open your Vercel frontend URL.
+- Test logging in, registering, and browsing stores.
+- Ensure that the frontend communicates successfully with the Render backend.
+
+**Congratulations! Your application is now live.**
