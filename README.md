@@ -10,7 +10,6 @@ RateIT is a modern, full-stack web application designed for users to discover st
 
 <img width="1917" height="862" alt="image" src="https://github.com/user-attachments/assets/3fdc5217-7cb9-4387-8100-897197af49de" />
 
-
 ## 🌟 Key Features & User Roles
 
 The platform uses Role-Based Access Control (RBAC) with three primary roles:
@@ -47,13 +46,20 @@ The platform uses Role-Based Access Control (RBAC) with three primary roles:
 - PostgreSQL
 - JWT Authentication
 
-## 🚀 Getting Started
+## 🚀 Getting Started (Step-by-Step Local Setup)
 
 ### Prerequisites
 - Node.js (v18 or higher)
 - PostgreSQL (or Docker Desktop)
+- Git
 
-### 1. Database Setup (Docker)
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/MiteshSakhare/Roxiler-Systems-Mitesh-Sakhare-Assignment.git
+cd "Roxiler Systems Assignment"
+```
+
+### Step 2: Database Setup (Docker)
 The quickest way to start the database is using Docker. Navigate to the backend directory and spin up the PostgreSQL container:
 ```bash
 cd backend
@@ -61,23 +67,25 @@ docker-compose up -d
 ```
 This automatically sets up a Postgres database on port `5432` matching the default `.env` credentials.
 
-### 2. Backend Setup
+### Step 3: Backend Setup
 Install dependencies and initialize the database schema:
 ```bash
-cd backend
+# Assuming you are already in the /backend directory from Step 2
 npm install
 npm run typeorm -- schema:drop -d src/database/data-source.ts
 npm run migration:run
 npm run seed
 ```
-Configure your environment variables in `.env` (database connection details).
+*(Note: If you run into NPM version errors, we have already added a `.npmrc` file to bypass legacy peer dependency conflicts automatically!)*
+
 Start the backend development server:
 ```bash
 npm run start:dev
 ```
+The backend will automatically kill any stale processes on port `3000` before starting up successfully!
 
-### 3. Frontend Setup
-Navigate to the frontend directory and install dependencies:
+### Step 4: Frontend Setup
+Open a **new terminal window**, navigate to the frontend directory, and install dependencies:
 ```bash
 cd frontend
 npm install
@@ -86,6 +94,10 @@ Start the frontend development server:
 ```bash
 npm run dev
 ```
+
+## 🌍 Deployment
+Want to deploy this project for free on the public internet? Check out our step-by-step deployment guide:
+👉 **[Read DEPLOY.md for Vercel & Render Setup](DEPLOY.md)**
 
 ## 📦 Database Seeding
 
