@@ -16,7 +16,9 @@ export const getDatabaseConfig = (
   username: configService.get<string>('database.username'),
   password: configService.get<string>('database.password'),
   database: configService.get<string>('database.name'),
-  ssl: configService.get<string>('database.url') ? { rejectUnauthorized: false } : false,
+  ssl: configService.get<string>('database.url')?.includes('sslmode=require') 
+       ? { rejectUnauthorized: false } 
+       : false,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
   synchronize: false,

@@ -37,11 +37,22 @@ Now we will deploy the Node.js backend on Render and connect it to the database 
 5. Click **Create Web Service**. 
 6. Once deployed, Render will give you a live URL (e.g., `https://rateit-backend.onrender.com`). **Save this URL!**
 
-> **Note on Migrations**: Once your backend web service is live, you need to run the database migrations and seed script. On your Render Web Service dashboard, click on the **Shell** tab and run:
-> ```bash
-> npm run migration:run
-> npm run seed
-> ```
+> **Note on Migrations & Seeding (Since Render removed Free Shell Access)**: 
+> You cannot run terminal commands on Render directly anymore. Instead, you can seed the remote database from your own computer!
+> 1. Go to your Render Database dashboard.
+> 2. Copy the **External Database URL**.
+> 3. On your local computer, open the `backend/.env` file.
+> 4. Add this line at the very top: `DATABASE_URL=paste_your_external_url_here`
+> 5. Open your local terminal in the `backend` folder and run:
+>    ```bash
+>    npm run migration:run
+>    npm run seed
+>    ```
+> 6. Your remote Render database is now fully populated! You can delete the `DATABASE_URL` from your local `.env` file to return to local development.
+
+### Troubleshooting `ECONNREFUSED` on Render
+If your Render Web Service fails to deploy with an `ECONNREFUSED` error, it means the backend cannot find your database and is trying to connect to `localhost`. 
+**Fix:** Go to your Render Web Service -> **Environment**, and double-check that you added the variable exactly named `DATABASE_URL` (all caps, no spaces) and pasted the **Internal Database URL** correctly. Then click **Manual Deploy -> Deploy latest commit**.
 
 ---
 
