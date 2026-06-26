@@ -10,11 +10,13 @@ export const getDatabaseConfig = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => ({
   type: 'postgres',
+  url: configService.get<string>('database.url'),
   host: configService.get<string>('database.host'),
   port: configService.get<number>('database.port'),
   username: configService.get<string>('database.username'),
   password: configService.get<string>('database.password'),
   database: configService.get<string>('database.name'),
+  ssl: configService.get<string>('database.url') ? { rejectUnauthorized: false } : false,
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
   synchronize: false,
